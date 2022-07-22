@@ -220,26 +220,16 @@ class SimpleArray
     //1.8** https://leetcode.com/problems/search-insert-position/ - в решении допустимо использовать что угодно.
     // (сложность задачи - написать алгоритм O(log N). Для начала можно написать O(N))
     //1.8.a - сложность O(N)
-    public function getSearchInsertPosition1(array $data, int $target): int
+    public function getSearchInsertPosition(array $data, int $target): int
     {
-        $result = null;
-        $prevKey = null;
-
-        foreach ($data as $key => $value) {
-            if($value > $target){
-                break;
-            } elseif ($value == $target) {
-                $result = $key;
-                break;
-            } else {
-                $prevKey = $key;
+        for($i = 0; $i < count($data); $i++){ //4
+            if($data[$i] == $target){
+                return $i;
+            } elseif($data[$i] > $target){
+                return $i;
             }
         }
-
-        return $result ?? ++$prevKey;
+        return count($data);
     }
-
-    //1.8.b - сложность O(log N)
-
 
 }

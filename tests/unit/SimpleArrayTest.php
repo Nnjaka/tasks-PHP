@@ -179,26 +179,32 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $this->assertEquals([1, 2], $result);
     }
 
-    public function testGetSearchInsertPosition1(){
+    public function testGetSearchInsertPosition(){
         $data = [1,3,5,6];
         $array = new SimpleArray();
 
         $target = 5;
-        $result = $array->getSearchInsertPosition1($data, $target);
+        $result = $array->getSearchInsertPosition($data, $target);
 
         $this->assertIsInt($result);
         $this->assertEquals(2, $result);
 
         $target = 7;
-        $result = $array->getSearchInsertPosition1($data, $target);
+        $result = $array->getSearchInsertPosition($data, $target);
 
         $this->assertIsInt($result);
         $this->assertEquals(4, $result);
 
         $target = 2;
-        $result = $array->getSearchInsertPosition1($data, $target);
+        $result = $array->getSearchInsertPosition($data, $target);
 
         $this->assertIsInt($result);
         $this->assertEquals(1, $result);
+
+        $target = -1;
+        $result = $array->getSearchInsertPosition($data, $target);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(0, $result);
     }
 }
