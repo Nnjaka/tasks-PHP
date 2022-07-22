@@ -29,6 +29,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getUniqueArrayItem1($data);
 
+        $this->assertIsInt($result);
         $this->assertEquals(8, $result);
     }
 
@@ -40,6 +41,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getUniqueArrayItem1($data);
 
+        $this->assertIsInt($result);
         $this->assertEquals(9, $result);
     }
 
@@ -51,6 +53,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getUniqueArrayItem1($data);
 
+        $this->assertIsInt($result);
         $this->assertEquals(11, $result);
     }
 
@@ -62,6 +65,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getPrevalentArrayAnyItem1($data);
 
+        $this->assertIsString($result);
         $this->assertStringContainsString( "Самый часто встречающийся элемент массива - 3, количество раз - 4", $result);
     }
 
@@ -73,6 +77,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getPrevalentArrayAnyItem2($data);
 
+        $this->assertIsString($result);
         $this->assertStringContainsString( "Самый часто встречающийся элемент массива - 3, количество раз - 4", $result);
     }
 
@@ -85,6 +90,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getPrevalentArrayAllItem($data);
 
+        $this->assertIsString($result);
         $this->assertStringContainsString( "Самый часто встречающиеся элементы массива - 20, 4, количество раз - 3", $result);
     }
 
@@ -96,6 +102,7 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getSecondPrevalentArrayItem($data);
 
+        $this->assertIsString($result);
         $this->assertStringContainsString( "Второй самый часто встречающийся элемент массива - -6, количество раз - 2", $result);
     }
 
@@ -107,8 +114,91 @@ class SimpleArrayTest extends \Codeception\Test\Unit
         $array = new SimpleArray();
         $result = $array->getDifferenceBetweenArrayElement($data);
 
+        $this->assertIsString($result);
         $this->assertStringContainsString( "Cамый частый - 5 раз, самый редкий - 1 раз, разница итого - 4", $result);
     }
 
+    public function testGetNextValueToMax1(){
+        $data = [1, 3, 4, 10, 2, 88];
 
+        $this->assertIsArray($data);
+
+        $array = new SimpleArray();
+        $result = $array->getNextValueToMax1($data);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(10, $result);
+    }
+
+    public function testGetNextValueToMax2(){
+        $data = [1, 3, 4, 10, 2, 88];
+
+        $this->assertIsArray($data);
+
+        $array = new SimpleArray();
+        $result = $array->getNextValueToMax2($data);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(10, $result);
+    }
+
+    public function testGetNextValueToMax3(){
+        $data = [1, 3, 4, 10, 2, 88];
+
+        $this->assertIsArray($data);
+
+        $array = new SimpleArray();
+        $result = $array->getNextValueToMax3($data);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(10, $result);
+    }
+
+    public function testGetCountPrevElemLessThanCurrent(){
+        $data = [1, 3, 4, 10, 2, 88];
+
+        $this->assertIsArray($data);
+
+        $array = new SimpleArray();
+        $result = $array->getCountPrevElemLessThanCurrent($data);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(4, $result);
+    }
+
+    public function testGetTwoSum(){
+        $data = [1, 3, 4, 10, 2, 88];
+        $target = 7;
+
+        $this->assertIsArray($data);
+
+        $array = new SimpleArray();
+        $result = $array->getTwoSum($data, $target);
+
+        $this->assertIsArray($result);
+        $this->assertEquals([1, 2], $result);
+    }
+
+    public function testGetSearchInsertPosition1(){
+        $data = [1,3,5,6];
+        $array = new SimpleArray();
+
+        $target = 5;
+        $result = $array->getSearchInsertPosition1($data, $target);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(2, $result);
+
+        $target = 7;
+        $result = $array->getSearchInsertPosition1($data, $target);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(4, $result);
+
+        $target = 2;
+        $result = $array->getSearchInsertPosition1($data, $target);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(1, $result);
+    }
 }
