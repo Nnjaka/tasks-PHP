@@ -125,7 +125,7 @@ class StringType
     }
 
     //3.7 https://leetcode.com/problems/palindrome-number/ - в решении допустимо использовать что угодно
-    public function getPalindromeNumber(int $number)
+    public function getPalindromeNumber(int $number): bool
     {
         if($number < 0){
             return false;
@@ -141,8 +141,16 @@ class StringType
     //3.8** Вывести самую длинную подстроку которая повторяется в строке не менее двух раз.
     //По условиям задачи - такая подстрока существует и строго одна.
     //abababcccababccc - ответ abab
-
-
-
+    public function getLongestSubstring(string $data): ?string
+    {
+        for($i=1; $i<strlen($data); $i++) {
+            $substr = substr($data, 0, -$i);
+            for ($j = 0; $j < strlen($data); $j++) {
+                if (substr_count($data, $substr) > 1) {
+                    return $substr;
+                }
+            }
+        }
+        return null;
+    }
 }
-

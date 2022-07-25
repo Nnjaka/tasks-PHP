@@ -303,4 +303,21 @@ class StringTypeTest extends \Codeception\Test\Unit
         $this->assertIsBool($result);
         $this->assertFalse($result);
     }
+
+    public function testGetLongestSubstring(){
+        $string = new StringType();
+
+        $data = 'abababcccababccc';
+
+        $result = $string->getLongestSubstring($data);
+        $this->assertIsString($result);
+        $this->assertEquals('abab', $result);
+
+        $data = 'resultasresultyuresulresult';
+
+        $result = $string->getLongestSubstring($data);
+        $this->assertIsString($result);
+        $this->assertEquals('result', $result);
+
+    }
 }
