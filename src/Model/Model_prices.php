@@ -7,7 +7,7 @@ class Model_prices
     public function __construct(
         public string $title,
         public string $model,
-        public Prices $year_prices
+        public array $year_prices
     ){}
 
 }

@@ -30,18 +30,20 @@ class ArrayObject
      */
     public function getModelAvgPrices(array $data): array
     {
-        $cars = [];
-        foreach ($data as $car) {
-            $cars[$car->title][$car->model][] = $car->price;
-        }
-
-
-        $model_prices = [];
-        foreach ($cars as $title => $models) {
-            foreach ($models as $model => $prices) {
-                $model_prices[] = new Model_avg_prices($title, $model, array_sum($prices) / count($prices));
-            }
-        }
+//        $cars = [];
+//        foreach ($data as $car) {
+//            $cars[$car->title][$car->model][] = $car->price;
+//        }
+//
+//
+//        $model_prices = [];
+//        foreach ($cars as $title => $models) {
+//            foreach ($models as $model => $prices) {
+//                $model_prices[] = new Model_avg_prices($title, $model, array_sum($prices) / count($prices));
+//            }
+//        }
+//
+//        return $model_prices;
 
         //my vision
         $tmp = [];
@@ -57,9 +59,6 @@ class ArrayObject
             $result[] = new Model_avg_prices($item->title, $item->model, array_sum($item->prices) / count($item->prices));
         }
         return $result;
-
-
-        return $model_prices;
     }
 
     //2.2* Сформировать массив данных вида string title, string model, year_prices[]
@@ -81,83 +80,51 @@ class ArrayObject
      *  ]
      *
      *
-//@todo fixme неправильно понятая задача
     */
-    public function getModelPrices(array $data): array
-    {
-        $cars = [];
-        foreach ($data as $key => $car) {
-            $cars[$car->title][$car->model][$car->year]['prices'][] = $car->price;
-            if (!isset($cars[$car->title][$car->model][$car->year]['min_price'])) {
-                $cars[$car->title][$car->model][$car->year]['min_price'] = $car->price;
-            } else {
-                if ($car->price < $cars[$car->title][$car->model][$car->year]['min_price']) {
-                    $cars[$car->title][$car->model][$car->year]['min_price'] = $car->price;
-                }
-            }
-            if (!isset($cars[$car->title][$car->model][$car->year]['max_price'])) {
-                $cars[$car->title][$car->model][$car->year]['max_price'] = $car->price;
-            } else {
-                if ($car->price > $cars[$car->title][$car->model][$car->year]['max_price']) {
-                    $cars[$car->title][$car->model][$car->year]['max_price'] = $car->price;
-                }
-            }
-        }
-
-        $model_prices = [];
-        foreach ($cars as $title => $models) {
-            foreach ($models as $model => $years) {
-                foreach ($years as $prices) {
-                    $model_prices[] = new Model_prices($title, $model, new Prices(
-                        $prices['min_price'],
-                        $prices['max_price'],
-                        array_sum($prices['prices']) / count($prices['prices'])
-                    ));
-                }
-            }
-        }
-
-        return $model_prices;
-    }
 
     /**
      * @param Car[] $data
      * @return array
      */
-    public function getModelPrices2(array $data)
+    public function getModelPrices(array $data)
     {
         $cars = [];
         foreach ($data as $car) {
-            $key = join('|', [$car->title, $car->model, $car->year,]);
+            $key = join('|', [$car->title, $car->model]);
 
-            $cars[$key]['prices'][] = $car->price;
-            if (!isset($cars[$key]['min_price'])) {
-                $cars[$key]['min_price'] = $car->price;
+            $cars[$key][$car->year]['prices'][] = $car->price;
+            if (!isset($cars[$key][$car->year]['min_price'])) {
+                $cars[$key][$car->year]['min_price'] = $car->price;
             } else {
-                if ($car->price < $cars[$key]['min_price']) {
-                    $cars[$key]['min_price'] = $car->price;
+                if ($car->price < $cars[$key][$car->year]['min_price']) {
+                    $cars[$key][$car->year]['min_price'] = $car->price;
                 }
             }
-            if (!isset($cars[$key]['max_price'])) {
-                $cars[$key]['max_price'] = $car->price;
+            if (!isset($cars[$key][$car->year]['max_price'])) {
+                $cars[$key][$car->year]['max_price'] = $car->price;
             } else {
-                if ($car->price > $cars[$key]['max_price']) {
-                    $cars[$key]['max_price'] = $car->price;
+                if ($car->price > $cars[$key][$car->year]['max_price']) {
+                    $cars[$key][$car->year]['max_price'] = $car->price;
                 }
             }
         }
-
 
         $model_prices = [];
-        foreach ($cars as $model => $prices) {
-            $car = explode(',', $model);
-            $model_prices[] = new Model_prices($car[0], $car[1], new Prices(
-                $prices['min_price'],
-                $prices['max_price'],
-                array_sum($prices['prices']) / count($prices['prices'])
-            ));
-        }
+        $pricesByYears = [];
+        foreach ($cars as $model => $year_prices) {
+            $car = explode('|', $model);
+            foreach($year_prices as $year => $prices) {
+                $pricesByYears[$year] = new Prices(
+                    $prices['min_price'],
+                    $prices['max_price'],
+                    array_sum($prices['prices']) / count($prices['prices'])
+                );
+            }
 
+            $model_prices[] = new Model_prices($car[0], $car[1], $pricesByYears);
+            unset($pricesByYears);
+
+        }
         return $model_prices;
     }
 }
