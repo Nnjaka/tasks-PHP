@@ -16,11 +16,11 @@ class TwoDimensionalArray
     //4.2* Обогатить класс из прошлой задачи функцией each(callable $func(&$value))
     private array $array;
 
-    public function __construct(public int $a, public int $b)
+    public function __construct(public int $rows, public int $cells)
     {
         $array = [];
-        for ($i = 0; $i < $a; $i++) {
-            for ($j = 0; $j < $b; $j++) {
+        for ($i = 0; $i < $this->rows; $i++) {
+            for ($j = 0; $j < $this->cells; $j++) {
                 $array[$i][$j] = null;
             }
         }
@@ -30,42 +30,34 @@ class TwoDimensionalArray
     public function fillRandom(): void
     {
         $this->each(function (&$value) {
-
-            //по идее должно работать и так
             $value = mt_rand(0, 1000);
-
-            //но для верности
             return $value;
         });
     }
 
-    public function set(int $a, int $b, mixed $value)
+    public function set(int $row, int $cell, mixed $value)
     {
-        if (!array_key_exists($a, $this->array) || !array_key_exists($b, $this->array)) {
-            throw new \Exception('Cannot set element with a - ' . $a . ', b - ' . $b . '. Not found');
+        if (!array_key_exists($row, $this->array) || !array_key_exists($cell, $this->array)) {
+            throw new \Exception('Cannot set element with row - ' . $row . ', cell - ' . $cell . '. Not found');
         }
-        $this->array[$a][$b] = $value;
+        $this->array[$row][$cell] = $value;
     }
 
-    public function get(int $a, int $b): mixed
+    public function get(int $row, int $cell): mixed
     {
-        if (!array_key_exists($a, $this->array) || !array_key_exists($b, $this->array)) {
-            throw new \Exception('Cannot get element with a - ' . $a . ', b - ' . $b . '. Not found');
+        if (!array_key_exists($row, $this->array) || !array_key_exists($cell, $this->array)) {
+            throw new \Exception('Cannot get element with a - ' . $row . ', b - ' . $cell . '. Not found');
         }
-        return $this->array[$a][$b];
+        return $this->array[$row][$cell];
     }
 
     //4.2* Обогатить класс из прошлой задачи функцией each(callable $func(&$value))
-
     public function each(\Closure $func): void
     {
         foreach ($this->array as $i => $row) {
             foreach ($row as $j => $value) {
                 $newValue = $func($value);
-
-                //я не уверен что это надо
                 $this->set($i, $j, $newValue);
-
             }
         }
     }
@@ -79,5 +71,77 @@ class TwoDimensionalArray
             }
         }
     }
+}
 
+//4.4 Найти максимальное значение в двумерном массиве
+//4.4.a без использования доп функций двумерного массива
+function getMaxValue(): int
+{
+    $rows = 3;
+    $cells = 3;
+    $maxValue = 0;
+
+    $objArray = new TwoDimensionalArray($rows, $cells);
+    $objArray->fillRandom();
+
+    for($i=0; $i<$rows; $i++){
+        for ($j=0; $j<$cells; $j++){
+            if($objArray->get($i, $j) > $maxValue){
+                $maxValue = $objArray->get($i, $j);
+            }
+        }
+    }
+
+   return $maxValue;
+}
+
+//4.4.b с использованием each
+function getMaxValueWithEach()
+{
+    $maxValue = 0;
+
+    $objArray = new TwoDimensionalArray(3, 3);
+    $objArray->fillRandom();
+
+    $objArray->each(function($value) use (&$maxValue) {
+        if($value > $maxValue){
+            $maxValue = $value;
+        }
+        return  $value;
+    });
+
+    return $maxValue;
+}
+
+//4.4.c с использованием генератора
+function getMaxValueWithGenerator(): int
+{
+    $maxValue = 0;
+
+    $objArray = new TwoDimensionalArray(3, 3);
+    $objArray->fillRandom();
+
+    foreach($objArray->values() as $value){
+        if($value > $maxValue){
+            $maxValue = $value;
+        }
+    };
+
+    return $maxValue;
+}
+
+//4.4 Найти сумму элементов центральной диагонали (Наш массив квадратный)
+function getSumElemOfcentralDiagonal(): int
+{
+    $size = 2;
+    $sumElem= 0;
+
+    $objArray = new TwoDimensionalArray($size, $size);
+    $objArray->fillRandom();
+
+    for($i=0; $i<$size; $i++){
+        $sumElem += $objArray->get($i, $i);
+    }
+
+    return $sumElem;
 }
