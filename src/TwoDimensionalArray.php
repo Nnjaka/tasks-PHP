@@ -14,71 +14,60 @@ class TwoDimensionalArray
     //set(int $a, int $b, mixed $value)
 
     //4.2* Обогатить класс из прошлой задачи функцией each(callable $func(&$value))
-    public array $array;
+    private array $array;
 
-    public function __construct(protected int $a, protected int $b)
+    public function __construct(public int $a, public int $b)
     {
         $array = [];
-        for($i=0; $i < $a; $i++){
-            for($j=0; $j < $b; $j++){
-                $array[$i][$j] = 0;
+        for ($i = 0; $i < $a; $i++) {
+            for ($j = 0; $j < $b; $j++) {
+                $array[$i][$j] = null;
             }
         }
-
         $this->array = $array;
     }
 
-    public function get(int $a, int $b): mixed
+    public function fillRandom(): void
     {
-        if(!array_key_exists($a, $this->array) || !array_key_exists($b, $this->array)){
-            throw new \Exception('Cannot get element with a - ' . $a . ', b - ' . $b . '. Not found');
+        foreach ($this->array as $i => $row) {
+            foreach ($row as $j => $value) {
+                $this->set($i, $j, mt_rand(0, 1000));
+            }
         }
-        return $this->array[$a][$b];
     }
 
     public function set(int $a, int $b, mixed $value)
     {
-        if(!array_key_exists($a, $this->array) || !array_key_exists($b, $this->array)){
+        if (!array_key_exists($a, $this->array) || !array_key_exists($b, $this->array)) {
             throw new \Exception('Cannot set element with a - ' . $a . ', b - ' . $b . '. Not found');
         }
         $this->array[$a][$b] = $value;
     }
 
-    //4.2* Обогатить класс из прошлой задачи функцией each(callable $func(&$value))
-    public function each(\Closure $func): mixed
+    public function get(int $a, int $b): mixed
     {
-      return $func($this->array);
+        if (!array_key_exists($a, $this->array) || !array_key_exists($b, $this->array)) {
+            throw new \Exception('Cannot get element with a - ' . $a . ', b - ' . $b . '. Not found');
+        }
+        return $this->array[$a][$b];
+    }
+
+    //4.2* Обогатить класс из прошлой задачи функцией each(callable $func(&$value))
+
+    public function each(\Closure $func): void
+    {
+        //@todo implement
+        $func($this->array);
     }
 
     //4.3* Обогатить класс из прошлой задачи генератором возвращающим ключ-значение для всех элементов двумерного массива
-    public function generateKeyValue(){
-        $count = count($this->array);
-
-        for($i=0; $i<$count; $i++){
-            for($j=0; $j<count($this->array[$i]); $j++){
-                yield ([implode(',',[$i,$j, $this->array[$i][$j]])]);
-            }
-        }
-    }
-
-
-    //4.4 Найти максимальное значение в двумерном массиве
-    //4.4.a без использования доп функций
-    public function getMaxValue()
+    public function values(): \Generator
     {
-        $count = count($this->array);
-        $max = 0;
-
-        for($i=0; $i<$count; $i++){
-            for($j=0; $j<count($this->array[$i]); $j++){
-                if($this->array[$i][$j] > $max){
-                    $max = $this->array[$i][$j];
-                }
+        foreach ($this->array as $i => $row) {
+            foreach ($row as $j => $value) {
+                yield [$i, $j] => $value;
             }
         }
-
-        return $max;
     }
-
 
 }

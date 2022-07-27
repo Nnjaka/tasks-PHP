@@ -92,6 +92,16 @@ class ArrayObject
         foreach ($data as $car) {
             $key = join('|', [$car->title, $car->model]);
 
+            /*
+            if (!isset($cars[$key])) {
+                $cars[$key] = (object) [
+                    'title' => $car->title,
+                    'model' => $car->model,
+                    'years' => [],
+                ];
+            }
+            */
+
             $cars[$key][$car->year]['prices'][] = $car->price;
             if (!isset($cars[$key][$car->year]['min_price'])) {
                 $cars[$key][$car->year]['min_price'] = $car->price;
@@ -111,8 +121,8 @@ class ArrayObject
 
         $model_prices = [];
         $pricesByYears = [];
-        foreach ($cars as $model => $year_prices) {
-            $car = explode('|', $model);
+        foreach ($cars as $key => $year_prices) {
+            $car = explode('|', $key);
             foreach($year_prices as $year => $prices) {
                 $pricesByYears[$year] = new Prices(
                     $prices['min_price'],
