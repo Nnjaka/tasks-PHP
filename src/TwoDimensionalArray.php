@@ -56,8 +56,11 @@ class TwoDimensionalArray
 
     public function each(\Closure $func): void
     {
-        //@todo implement
-        $func($this->array);
+        foreach ($this->array as $i => $row) {
+            foreach ($row as $j => $value) {
+                $func(&$value);
+            }
+        }
     }
 
     //4.3* Обогатить класс из прошлой задачи генератором возвращающим ключ-значение для всех элементов двумерного массива
