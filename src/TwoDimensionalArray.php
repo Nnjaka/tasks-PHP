@@ -29,11 +29,14 @@ class TwoDimensionalArray
 
     public function fillRandom(): void
     {
-        foreach ($this->array as $i => $row) {
-            foreach ($row as $j => $value) {
-                $this->set($i, $j, mt_rand(0, 1000));
-            }
-        }
+        $this->each(function (&$value) {
+
+            //по идее должно работать и так
+            $value = mt_rand(0, 1000);
+
+            //но для верности
+            return $value;
+        });
     }
 
     public function set(int $a, int $b, mixed $value)
@@ -58,7 +61,11 @@ class TwoDimensionalArray
     {
         foreach ($this->array as $i => $row) {
             foreach ($row as $j => $value) {
-                $func(&$value);
+                $newValue = $func($value);
+
+                //я не уверен что это надо
+                $this->set($i, $j, $newValue);
+
             }
         }
     }
