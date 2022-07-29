@@ -79,10 +79,11 @@ function getMaxValue(): int
 {
     $rows = 3;
     $cells = 3;
-    $maxValue = 0;
 
     $objArray = new TwoDimensionalArray($rows, $cells);
     $objArray->fillRandom();
+
+    $maxValue = $objArray->get(0,0);
 
     for($i=0; $i<$rows; $i++){
         for ($j=0; $j<$cells; $j++){

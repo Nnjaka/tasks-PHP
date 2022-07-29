@@ -3,8 +3,6 @@
 namespace unit;
 
 use App\StringType;
-use function PHPUnit\Framework\assertEquals;
-use \Codeception\Example;
 
 class StringTypeTest extends \Codeception\Test\Unit
 {
@@ -20,6 +18,30 @@ class StringTypeTest extends \Codeception\Test\Unit
     protected function _after()
     {
     }
+
+    /**
+     * @dataProvider symmetryDataprovider
+     */
+    public function testSymmetryString(string $s, bool $expected)
+    {
+        $string = new StringType();
+        $result = $string->checkSymmetryString1($s);
+        $this->assertEquals($expected, $result);
+    }
+
+    protected function symmetryDataprovider()
+    {
+        return [
+            ['a', true,],
+            ['aa', true,],
+            ['aba', true,],
+            ['a5b5a', true,],
+            ['a5bb5a', true,],
+            ['a5bbc5a', false,],
+            ['abcde', false,],
+        ];
+    }
+
 
     public function testCheckSymmetryString1()
     {
@@ -270,7 +292,8 @@ class StringTypeTest extends \Codeception\Test\Unit
         $this->assertEquals(['a' => 1, 'b' => 1, 'c' => 1], $result);
     }
 
-    public function testGetPalindromeNumber(){
+    public function testGetPalindromeNumber()
+    {
         $string = new StringType();
 
         $data = 121;
@@ -304,7 +327,8 @@ class StringTypeTest extends \Codeception\Test\Unit
         $this->assertFalse($result);
     }
 
-    public function testGetLongestSubstring(){
+    public function testGetLongestSubstring()
+    {
         $string = new StringType();
 
         $data = 'abababcccababccc';

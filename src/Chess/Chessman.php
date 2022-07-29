@@ -2,8 +2,6 @@
 
 namespace App\Chess;
 
-use phpDocumentor\Reflection\PseudoTypes\PositiveInteger;
-
 require_once __DIR__ . '/Chessman.php';
 require_once __DIR__ . '/Position.php';
 
@@ -29,7 +27,7 @@ abstract class Chessman
                 }
                 if(empty(array_search($oneMove, $verifiedCoordinates))){
                     $verifiedCoordinates[] = $oneMove;
-                    $newValues = static::possibleMoves(new Position((int)$oneMove->x, (int)$oneMove->y));
+                    $newValues = static::possibleMoves(new Position((int)$oneMove->x, (int)$oneMove->y)); //ЗАЧЕМ КАРЛ???
 
                     foreach ($newValues as $newValue){
                         if(empty(array_search($newValue, $verifiedCoordinates))){
