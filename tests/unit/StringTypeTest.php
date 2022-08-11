@@ -342,6 +342,16 @@ class StringTypeTest extends \Codeception\Test\Unit
         $result = $string->getLongestSubstring($data);
         $this->assertIsString($result);
         $this->assertEquals('result', $result);
+    }
 
+    public function testReplaceAllPreviousOccurrences()
+    {
+        $string = new StringType();
+
+        $data = 'МИНИМУМ';
+
+        $result = $string->replaceAllPreviousOccurrences($data);
+        $this->assertIsString($result);
+        $this->assertEquals('.ИНИ.УМ', $result);
     }
 }

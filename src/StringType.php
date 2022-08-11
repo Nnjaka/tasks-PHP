@@ -2,8 +2,6 @@
 
 namespace App;
 
-use function PHPUnit\Framework\isEmpty;
-
 class StringType
 {
     /*3 - Строки*/
@@ -153,4 +151,24 @@ class StringType
         }
         return null;
     }
+
+    //3.9(6.4) String49. Дана строка, состоящая из русских слов, набранных заглавными буквами и разделенных пробелами
+    // (одним или несколькими). Преобразовать каждое слово в строке, заменив в нем все предыдущие вхождения его
+    // последней буквы на символ «.» (точка). Например, слово «МИНИМУМ» надо преобразовать в «.ИНИ.УМ».
+    // Количество пробелов между словами не изменять.
+    //строку в массив не преобразовывать
+    public function replaceAllPreviousOccurrences(string $string){
+        $length = strlen($string) - 1;
+        $firstSymbol = $string[$length];
+
+        for($i = $length-1; $i>= 0; $i--){
+            if($string[$i] !== ' ' && $string[$i+1] === ' '){
+                $firstSymbol = $string[$i];
+            } else if ($string[$i] === $firstSymbol){
+                $string[$i] = '.';
+            }
+        }
+        return $string;
+    }
+
 }
